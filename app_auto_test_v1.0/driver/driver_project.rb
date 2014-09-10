@@ -24,6 +24,9 @@ class DriverProject
         init_param_data(auto_control, pt.param_table)
         logger(project_name).info "*******************初始化测试数据结束*******************\n"
         @pt = ParamTable.new(auto_control)
+        puts pt.project_array
+        puts pt.case_hash
+        puts pt.flow_hash
         @dc = DriverCase.new(@pt, auto_control)
     end
 

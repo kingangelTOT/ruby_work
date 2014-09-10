@@ -34,7 +34,7 @@ class DriverElement
         element_content_get_element_name = element_content['get_element_name'] #功能未实现
         element_report_hash = ''
         if !element_content_location['is_script_condition'].eql?('no_element')
-            element = mwd.element_present?(element_content_location['how'], element_content_location['what'])
+            element = mwd.element_present?(element_content_location['how'], element_content_location['what'], element_content_location['is_script_condition'])
             operate_value = is_operate_element(mwd,element, element_index, element_content_operate, content, need_element)
             # sleep(element_content_operate['is_wait']) if element_content_operate.has_key?('is_wait')
             logger(project_name).info "元素:#{element_index}的操作类型:#{element_content_operate}, 操作值:#{content[element_index]}" if !operate_value.eql?('')

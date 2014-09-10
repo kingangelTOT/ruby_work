@@ -73,7 +73,7 @@ class DriverCheckPoint
         element_result = select_val_type(check_point_specified, element, check_point_specified['value_type'], mwd, content, transmit_value)
         compare_result = false
         # element_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value) if check_point_specified.has_key?('script_name')
-        expect_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value)
+        expect_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value, element)
         compare_result = true if element_result.to_s.eql?(expect_result.to_s)
         hash['checkpoint_name'] = check_point_specified['checkpoint_name']
         hash['element_index'] = element_index
@@ -108,9 +108,14 @@ class DriverCheckPoint
         result
     end
     
-    
     def element(*args)
-        args[2].analysis_element(:element => args[0], :type => args[1]['value_type'])
+        if !args[1]['value_type'].eql?('script')
+            args[2].analysis_element(:element => args[0], :type => args[1]['value_type'])
+        else
+            transmit_hash = process(args[1], args[4])
+            script_name = args[1]['script_name']
+            result = @val.send :"#{script_name[0]}", control_value, args[3], script_name[1..script_name.length-1], transmit_hash, @val, args[0]
+        end
     end
     # def check_empty_element(element_index, content)
         # hash = Hash.new
@@ -132,14 +137,14 @@ class DriverCheckPoint
         transmit_hash
     end
     
-    def element_expect(expectation_type, value, content, transmit_value)
+    def element_expect(expectation_type, value, content, transmit_value, element)
         result = ''
         transmit_hash = process(value, transmit_value)
         
         case expectation_type
             when 'script'
                 expectation_value_or_script = value['expectation_value_or_script']
-                result = @val.send :"#{expectation_value_or_script[0]}", control_value, content, expectation_value_or_script[1..expectation_value_or_script.length-1], transmit_hash, @val
+                result = @val.send :"#{expectation_value_or_script[0]}", control_value, content, expectation_value_or_script[1..expectation_value_or_script.length-1], transmit_hash, @val, element
             when 'sql'
                 result = @val.send :val_get_from_sql, value['expectation_value_or_script']
             when 'string'

@@ -19,11 +19,15 @@ def capture_stdout
     end
 end
 
-def is_keyboard
+def is_hide_keyboard
     captured_content = capture_stdout do
         system('adb shell dumpsys input_method | grep mInputShown')
     end
-    captured_content.chop.include?('mInputShown=true')
+    res = captured_content.chop.include?('mInputShown=true')
+    puts "is_keyboard:#{res}"
+    if res
+        driver.hide_keyboard 
+    end
 end
 
 opts = {caps:{deviceName: 'HC46GWY04694', platformName: 'Android', appActivity: '.WelcomeActivity', appPackage: 'com.tcg.penny'},
@@ -31,44 +35,33 @@ opts = {caps:{deviceName: 'HC46GWY04694', platformName: 'Android', appActivity: 
 driver = Appium::Driver.new(opts)
 driver.start_driver
 
-begin_time = Time.now.to_i
-end_time = 0
-# num = 1
-while end_time < begin_time + 63
-    # x = [200,348,440]
-    # y = [648,854,1036]
-    # x_i = x[rand(0..2)]
-    # y_i = y[rand(0..2)]
-    x = [154]
-    y = [630]
-    x_i = x[0]
-    y_i = y[0]
-    action = Appium::TouchAction.new.tap(x: x_i, y: y_i).release
-    action.perform
-    end_time = Time.now.to_i
-    # puts "x_i:#{x_i}"
-    # puts "y_i:#{y_i}"
-    # num+=1
-    sleep(0.5)
-end
-
-
 ###登录
-# element = driver.find_element('id', 'com.tcg.penny:id/pwd_cb')
-# puts element.selected?
-# puts element.enabled?
-# puts element.tag_name
-# puts element.displayed?
-# element = driver.find_element('id', 'com.tcg.penny:id/account_cb')
-# puts element.selected?
-# puts element.enabled?
-# puts element.tag_name
-# puts element.displayed?
-# puts element.attribute('class')
-# element = driver.find_element('id', 'com.tcg.penny:id/passwrod')
-# element.send_keys('11111')
-# element = driver.find_element('id', 'com.tcg.penny:id/logining')
-# element.click
+element = driver.find_element('id', 'com.tcg.penny:id/account')
+is_hide_keyboard
+element.send_keys('13764905634')
+element = driver.find_element('id', 'com.tcg.penny:id/passwrod')
+is_hide_keyboard
+element.send_keys('111111')
+element = driver.find_element('id', 'com.tcg.penny:id/logining')
+is_hide_keyboard
+element.click
+
+#礼品
+element = driver.find_element('id', 'com.tcg.penny:id/select_btn_gift')
+element.click
+elements = driver.find_elements(:xpath=>"//android.widget.TextView")
+for i in 0..elements.size-1
+    puts elements[i].text
+end
+# puts "size:#{size}"
+# for i in 0..size-1
+    # element = driver.find_element('xpath', "//android.widget.ListView[1]//android.widget.LinearLayout[#{i}]//android.widget.TextView[0]")
+    # puts element.text
+    # element = driver.find_element('xpath', "//android.widget.ListView[1]//android.widget.LinearLayout[#{i}]//android.widget.TextView[1]")
+    # puts element.text
+# end
+###登录
+
 ###注册
 # sleep(10)
 # driver.close_app

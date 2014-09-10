@@ -1,5 +1,5 @@
 #encoding:utf-8
-base_path: E:\360CloudUI\Cache\20655813\ruby_work\auto_test
+base_path: E:\work_git\ruby_work\app_auto_test\app_auto_test_v1.0
 project: game_center
 flow_max_size: ['b','c','d','e','f','g','h','i','j','k','l','m','n']
 # username: kingangelTOT
@@ -31,20 +31,20 @@ ready_time: 30
 
 
 #########email#############
-smtp_host: 
-smtp_username: 
-smtp_password: 
+smtp_host: smtp.exmail.com
+smtp_username: kai.yan@tsingch.com
+smtp_password: king258angel
 
-send_from: 
+send_from: <kai.yan@tsingch.com>
 send_to:
-- 
+- bo.zhang@tsingch.com
 #########email#############
 
 #########appium_properties##########
 app_driver:
-  device_name: 
-  platform_name: 
+  device_name: d3658b6
+  platform_name: android
   com.tcg.penny:
-    app_activity: 
-    app_package: 
+    app_activity: .WelcomeActivity
+    app_package: com.tcg.penny
 #########appium_properties##########

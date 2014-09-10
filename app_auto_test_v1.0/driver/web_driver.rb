@@ -128,9 +128,19 @@ class MyWebDriver
         self.args = args
     end
 
-    def element_present?(how, what)
+    def element_present?(how, what, is_script_condition)
         logger(args[:auto_control]['project']).info "查询元素 how:#{how} what:#{what}"
-        @driver.find_element(how,what)
+        case is_script_condition
+            when 'script'
+                element = driver.execute_script(what)
+            when 'find_element'
+                element = driver.find_element(how, what)
+            when 'find_elements'
+                element = driver.find_elements(how, what)
+            else
+                raise "元素查询类型:#{is_script_condition}不支持,请扩展类型或者另选其它类型!!!!"
+        end
+        element
         # true
     rescue Selenium::WebDriver::Error::NoSuchElementError
         # raise '元素,未找到!!!!!!........'

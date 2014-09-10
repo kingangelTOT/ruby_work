@@ -83,14 +83,16 @@ module GameCenter
         puts sql
         res = mysql.get_from_sql(sql)
         data = Hash.new
-        return data if res.size == 0
-        if get_flied_names.size > 0
+        array = Array.new
+        return array if res.size == 0
+        if get_flied_names.size >= 1
             res.each {|row|
                 get_flied_names.each { |field|
                     data[field] = row[field]
+                    array << data
                 }
             }
-            return data
+            return array
         else
             return res
         end 
@@ -148,7 +150,7 @@ module GameCenter
     
     def get_uuid_by_phone(val,database_name,phone)
         mysql_basis = val.init_select_database(database_name)
-        uuid = select_by_sql(mysql_basis, '*', 't_user', "f_user_phone = #{phone}", ['f_uuid'])['f_uuid']
+        uuid = select_by_sql(mysql_basis, '*', 't_user', "f_user_phone = #{phone}", ['f_uuid'])[0]['f_uuid']
         "'#{uuid}'"
     end
     
@@ -167,7 +169,7 @@ module GameCenter
         need_element_value_hash = get_transmit_value(args[3])
         uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
         mysql_gamecenter = args[4].init_select_database(args[2][0])
-        game_coin = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin'])['game_coin']
+        game_coin = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin'])[0]['game_coin']
         game_coin
     end
     
@@ -175,7 +177,7 @@ module GameCenter
         need_element_value_hash = get_transmit_value(args[3])
         uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
         mysql_gamecenter = args[4].init_select_database(args[2][0])
-        game_coin_enable = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin_enable'])['game_coin_enable']
+        game_coin_enable = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin_enable'])[0]['game_coin_enable']
         game_coin_enable
     end
     
@@ -193,8 +195,8 @@ module GameCenter
         need_element_value_hash = get_transmit_value(args[3])
         uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
         mysql_gamecenter = args[4].init_select_database(args[2][0])
-        extract_money_amount_all = select_by_sql(mysql_gamecenter, 'SUM(coin) AS aaa', 'gc_log_game_coin', "UUID = #{uuid} AND TYPE = 2", ['aaa'])['aaa'].to_i
-        withdrawed_money = select_by_sql(mysql_gamecenter, 'SUM(coin) AS bbb', 'gc_log_game_coin', "UUID = #{uuid} AND TYPE = 4", ['bbb'])['bbb'].to_i
+        extract_money_amount_all = select_by_sql(mysql_gamecenter, 'SUM(coin) AS aaa', 'gc_log_game_coin', "UUID = #{uuid} AND TYPE = 2", ['aaa'])[0]['aaa'].to_i
+        withdrawed_money = select_by_sql(mysql_gamecenter, 'SUM(coin) AS bbb', 'gc_log_game_coin', "UUID = #{uuid} AND TYPE = 4", ['bbb'])[0]['bbb'].to_i
         extract_money_amount = get_extract_money_amount(args[1],args[2],args[3],args[4]).to_i
         all = withdrawed_money + extract_money_amount
         return 'is_true' if all == extract_money_amount_all
@@ -206,8 +208,8 @@ module GameCenter
         uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
         mysql_gamecenter = args[4].init_select_database(args[2][0])
         
-        subtract_coin = select_by_sql(mysql_gamecenter, '*', 'gc_log_game_coin', "id = (SELECT MAX(id) FROM gc_log_game_coin WHERE UUID = #{uuid} AND TYPE = 2)", ['coin'])['coin'].to_i
-        game_money_amount = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin'])['game_coin'].to_i
+        subtract_coin = select_by_sql(mysql_gamecenter, '*', 'gc_log_game_coin', "id = (SELECT MAX(id) FROM gc_log_game_coin WHERE UUID = #{uuid} AND TYPE = 2)", ['coin'])[0]['coin'].to_i
+        game_money_amount = select_by_sql(mysql_gamecenter, '*', 'gc_user', "UUID = #{uuid}", ['game_coin'])[0]['game_coin'].to_i
         case need_element_value_hash['select_num_title'][0]
             when '1'
                 all = 50 + game_money_amount
@@ -280,5 +282,32 @@ module GameCenter
                 box_string = "游戏结束，您获得了#{data.count}个宝箱，10000金币，请尽快抽奖。"
         end
         box_string     
-    end 
+    end
+    
+    def get_gift_string(*args)
+        result = ''
+        args[5][0..8].each{|element|
+            result << element.text
+        }
+        result
+    end
+    
+    def validate_gift(*args)
+        box_string = '礼品'
+        need_element_value_hash = get_transmit_value(args[3])
+        uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
+        mysql_gamecenter = args[4].init_select_database(args[2][0])
+        bid_array = select_by_sql(mysql_gamecenter, '*', 'gc_user_ware', "UUID = #{uuid} ORDER BY id DESC LIMIT 0,4", ['bid'])
+        puts "bid_array:#{bid_array}"
+        bid_array.each{|hash|
+            gift_array = select_by_sql(mysql_gamecenter, '*', 'gc_app_box', "id = #{hash['bid']}", ['name','description'])
+            gift_array.each{|git_hash|
+                box_string << git_hash['name']
+                box_string << git_hash['description']
+                box_string << '  '
+                box_string << "#{git_hash['create_time']}"
+            }
+        }
+        box_string
+    end
 end

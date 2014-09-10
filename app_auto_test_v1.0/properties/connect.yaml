@@ -1,13 +1,13 @@
 #encoding:UTF-8
-alpha_host: 
-alpha_userName: 
-alpha_password: 
-# alpha_dataBaseName: 
+alpha_host: 9.9.9.12
+alpha_userName: fmrom
+alpha_password: fmrom@2014
+# alpha_dataBaseName: gamecenter
 alpha_port: 3306
 ##################################
-#mysql_type: 
-#ssh_host: 
-#ssh_username: 
-#ssh_password: 
-#ssh_port: 
-#alpha_encoding: 
+#mysql_type: ssh
+#ssh_host: 101.251.100.3
+#ssh_username: hao139user01
+#ssh_password: hao139user014902
+#ssh_port: 3310
+#alpha_encoding: utf8
