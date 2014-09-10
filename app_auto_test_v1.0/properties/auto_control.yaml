@@ -1,0 +1,50 @@
+#encoding:utf-8
+base_path: E:\360CloudUI\Cache\20655813\ruby_work\auto_test
+project: game_center
+flow_max_size: ['b','c','d','e','f','g','h','i','j','k','l','m','n']
+# username: kingangelTOT
+app_or_web: app
+
+
+app_path: E:\auto_test
+
+uninstall_apk:
+- com.tcg.penny
+init_test_data: 
+  account_management: init_account_management
+  registration: init_registration
+  forget_pwd: init_forget_pwd
+  login: init_login
+  game_scene: init_select_scene
+  game_description: init_game_description
+###monkey_properties#########
+s: 500
+touch: 1000
+monkey_time: 15
+#######monkey_properties#########
+
+##########appium+web###############
+selenium_project_path: E:/360CloudUI/Cache/20655813/ruby_work/web_auto/spec/lib/romdu_front_spec.rb
+selenium_time: 60
+##########appium+web###############
+ready_time: 30
+
+
+#########email#############
+smtp_host: 
+smtp_username: 
+smtp_password: 
+
+send_from: 
+send_to:
+- 
+#########email#############
+
+#########appium_properties##########
+app_driver:
+  device_name: 
+  platform_name: 
+  com.tcg.penny:
+    app_activity: 
+    app_package: 
+#########appium_properties##########

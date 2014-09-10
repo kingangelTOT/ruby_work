@@ -1,0 +1,13 @@
+#encoding:UTF-8
+alpha_host: 
+alpha_userName: 
+alpha_password: 
+# alpha_dataBaseName: 
+alpha_port: 3306
+##################################
+#mysql_type: 
+#ssh_host: 
+#ssh_username: 
+#ssh_password: 
+#ssh_port: 
+#alpha_encoding: 
