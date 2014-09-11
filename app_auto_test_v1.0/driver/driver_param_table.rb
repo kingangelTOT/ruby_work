@@ -20,7 +20,7 @@ class DriverParamTable
         get_driver_param_table.each { |value|
             # puts "重复循环的元素:#{value['retry_elements']},是否包含:#{element}"
             # puts "判断结果:#{value['retry_elements'].include?(element)}"
-            if value['retry_elements'].include?(element) && value['flow'].eql?(flow)
+            if value['cir_tag'].include?(element) && value['flow'].eql?(flow)
                 hash['retry_elements'] = value['retry_elements']
                 hash['param_source'] = value['param_source']
                 hash['param_source_value'] = value['param_source_value']

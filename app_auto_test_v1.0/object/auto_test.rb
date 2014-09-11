@@ -36,7 +36,13 @@ class AutoTest
                     # system("adb shell monkey -p #{apk_info['package_name']} -s #{auto_control['s']} --ignore-crashes --ignore-timeouts --monitor-native-crashes -v -v #{auto_control['touch']} > #{log_path}/#{apk_info['apk_name']}_log.txt")
                     # sleep(auto_control['monkey_time'])
                     # data_hash = parse_moneky_log("#{log_path}/#{apk_info['apk_name']}_log.txt")
-                    DriverProject.new(auto_control, apk_info['package_name']).begin_project
+                    begin
+                        DriverProject.new(auto_control, apk_info['package_name']).begin_project
+                    rescue Exception => e
+                        logger(project_name).error e
+                        system("adb shell logcat>E:\auto_test\log\#{apk_info['package_name']}_android.txt")
+                        retry
+                    end
                     
                     # send_email(subject, body)
                     # send_email(subject,content,to=nil)

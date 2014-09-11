@@ -1,6 +1,4 @@
 #encoding:utf-8
 require 'appium_lib'
-
-aaa = [1,2,3,4,5,6]
-
-puts aaa[0..4]
+a = '2014-09-09 19:05:27 +0800'
+puts a.sub ' +0800',''

@@ -82,15 +82,19 @@ module GameCenter
         sql = "SELECT #{flied} FROM #{table} WHERE #{conditions}"
         puts sql
         res = mysql.get_from_sql(sql)
-        data = Hash.new
         array = Array.new
         return array if res.size == 0
         if get_flied_names.size >= 1
             res.each {|row|
+                data = Hash.new
+                puts "get_flied_names:#{get_flied_names}"
+                puts "row:#{row}"
                 get_flied_names.each { |field|
-                    data[field] = row[field]
-                    array << data
+                    data[field] = row[field] 
                 }
+                array << data
+                puts "bid_array:#{array}"
+                puts '*******************************'
             }
             return array
         else
@@ -297,7 +301,7 @@ module GameCenter
         need_element_value_hash = get_transmit_value(args[3])
         uuid = get_uuid_by_phone(args[4], args[2][1], need_element_value_hash['account'])
         mysql_gamecenter = args[4].init_select_database(args[2][0])
-        bid_array = select_by_sql(mysql_gamecenter, '*', 'gc_user_ware', "UUID = #{uuid} ORDER BY id DESC LIMIT 0,4", ['bid'])
+        bid_array = select_by_sql(mysql_gamecenter, '*', 'gc_user_ware', "UUID = #{uuid} ORDER BY id DESC LIMIT 0,4", ['bid','create_time'])
         puts "bid_array:#{bid_array}"
         bid_array.each{|hash|
             gift_array = select_by_sql(mysql_gamecenter, '*', 'gc_app_box', "id = #{hash['bid']}", ['name','description'])
@@ -305,7 +309,7 @@ module GameCenter
                 box_string << git_hash['name']
                 box_string << git_hash['description']
                 box_string << '  '
-                box_string << "#{git_hash['create_time']}"
+                box_string << "#{hash['create_time'].to_s.sub ' +0800',''}"
             }
         }
         box_string

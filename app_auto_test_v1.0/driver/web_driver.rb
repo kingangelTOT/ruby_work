@@ -48,10 +48,10 @@ class MyWebDriver
         element
     end
 
-    def operate_element(element, operate_type, content=nil, transmit_value = nil)
+    def operate_element(element, operate_type, content=nil, element_index = nil)
         case operate_type
             when 'send_keys'
-                element.clear
+                clear_text(element,element_index)
                 is_hide_keyboard
                 element.send :"#{operate_type}", content
                 is_hide_keyboard
@@ -67,6 +67,19 @@ class MyWebDriver
                 action.perform
             # when 'script'
                 # self.send :"#{content}"
+        end
+    end
+    
+    def clear_text(element, element_index)
+        puts "element_index_inclear:#{element_index}"
+        puts element_index.eql?('passwrod_forgot')
+        if element_index.eql?('passwrod_forgot')
+            for i in 0..9
+                puts i
+                element.clear
+            end
+        else
+            element.clear
         end
     end
 

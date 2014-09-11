@@ -70,15 +70,17 @@ class DriverElement
         logger(@control_value['project']).info "元素#{element_index},是否需要操作:#{element_content_operate != false}+#{!element_content_operate.eql?('')},element_content_operate:#{element_content_operate}"
         if element_content_operate && !element_content_operate.eql?('') && element
             if element_content_operate['operate_type'].eql?('send_keys') || element_content_operate['operate_type'].eql?('select_list')
-                # puts "content:#{content}"
+                # logger(@control_value['project']).info "content:#{content}"
                 if !content.nil? && content.has_key?(element_index)
                     # puts "element_index:#{element_index}"
                     content_data = content[element_index] 
                     content_data = @val.send :"#{content_data}", need_element if content_data.include?('script')
                     logger(project_name).info  "content_data:#{content_data}"
                     operate_value = content_data
+                else 
+                    raise 'element_content is empty, please check it'
                 end
-                mwd.operate_element(element, element_content_operate['operate_type'], operate_value)
+                mwd.operate_element(element, element_content_operate['operate_type'], operate_value, element_index)
             elsif element_content_operate['operate_type'].eql?('click') || element_content_operate['operate_type'].eql?('submit')
                 mwd.operate_element(element, element_content_operate['operate_type'])
             else

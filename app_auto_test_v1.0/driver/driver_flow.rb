@@ -30,6 +30,13 @@ class DriverFlow
 
         specific_flow = @data_sources.flow_hash[flow]
         specific_flow.each {|element|
+            logger(project_name).info "*******element******begin:#{element}************************"
+            element_report_hash = @de.begin_element(element, mwd, flow)
+            logger(project_name).info "********element*****end:#{element}************************\n"
+            element_report_array << element_report_hash
+            if element_report_hash
+                break if element_report_hash['element_result'].eql?('no_element_break') || element_report_hash['element_result'].eql?('empty')
+            end
 
             hash = @dpt.trigger_cycle(element, flow)
             # puts hash
@@ -64,21 +71,14 @@ class DriverFlow
                         element_report_array << element_report_hash 
                         logger(project_name).info "flow:#{flow};element:#{retry_element_one};index:#{element_content['index']};element_report_array:#{element_report_array}"
                         if element_report_hash
-                            break if element_report_hash['element_result'].eql?('empty')
+                            break if element_report_hash['element_result'].eql?('no_element_break') || element_report_hash['element_result'].eql?('empty')
                         end
                     }
                     mwd.analysis_driver("#{hash['driver_operate_type']}") if hash.has_key?('driver_operate_type')
                 }
             end
-            logger(project_name).info "specific_flow:#{specific_flow}"
-            next if !hash.empty?
-            logger(project_name).info "*******element******begin:#{element}************************"
-            element_report_hash = @de.begin_element(element, mwd, element_content = nil, need_element_content = nil, flow)
-            logger(project_name).info "********element*****end:#{element}************************\n"
-            element_report_array << element_report_hash
-            if element_report_hash
-                break if element_report_hash['element_result'].eql?('empty')
-            end
+            # logger(project_name).info "specific_flow:#{specific_flow}"
+            # next if !hash.empty?
         }
         element_report_array.delete(false)
         element_report_array

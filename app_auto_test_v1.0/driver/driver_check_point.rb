@@ -67,21 +67,28 @@ class DriverCheckPoint
         check_point_specified = find_check_data(flow, content_index, element_index)
         logger(project_name).info "check_point_specified:#{check_point_specified}"
         # return 'element is empty' if !element
-        return false if check_point_specified.length == 0 || !check_point_specified['val_element_name'].eql?(element_index)
         hash = Hash.new
-        
-        element_result = select_val_type(check_point_specified, element, check_point_specified['value_type'], mwd, content, transmit_value)
-        compare_result = false
-        # element_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value) if check_point_specified.has_key?('script_name')
-        expect_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value, element)
-        compare_result = true if element_result.to_s.eql?(expect_result.to_s)
-        hash['checkpoint_name'] = check_point_specified['checkpoint_name']
-        hash['element_index'] = element_index
-        hash['element_result'] = element_result
-        hash['expect_result'] = expect_result
-        hash['compare_result'] = compare_result
-        # logger(project_name).info "check_result_index:{flow}=>#{element_index}=>#{content_index}"
-        logger(project_name).info "check_result_data:#{hash}"
+        if check_point_specified.length == 0 || !check_point_specified['val_element_name'].eql?(element_index)
+            if !element
+                hash['element_index'] = element_index
+                hash['element_result'] = 'no_element_break'
+            else
+                return false
+            end
+        else
+            element_result = select_val_type(check_point_specified, element, check_point_specified['value_type'], mwd, content, transmit_value)
+            compare_result = false
+            # element_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value) if check_point_specified.has_key?('script_name')
+            expect_result = element_expect(check_point_specified['expectation_type'], check_point_specified, content, transmit_value, element)
+            compare_result = true if element_result.to_s.eql?(expect_result.to_s)
+            hash['checkpoint_name'] = check_point_specified['checkpoint_name']
+            hash['element_index'] = element_index
+            hash['element_result'] = element_result
+            hash['expect_result'] = expect_result
+            hash['compare_result'] = compare_result
+            # logger(project_name).info "check_result_index:{flow}=>#{element_index}=>#{content_index}"
+            logger(project_name).info "check_result_data:#{hash}"
+        end
         hash
     end
     

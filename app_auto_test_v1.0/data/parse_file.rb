@@ -104,6 +104,7 @@ class ParseFile
                 hash['flow'] = data_row if letter.eql?('f')
                 hash['driver_operate_type'] = data_row if letter.eql?('g') && !data_row.nil?
                 hash['delete_element'] = data_row.split(',') if letter.eql?('h') && !data_row.nil?
+                hash['cir_tag'] = data_row if letter.eql?('i') && !data_row.nil?
             }
             array << hash
             line += 1

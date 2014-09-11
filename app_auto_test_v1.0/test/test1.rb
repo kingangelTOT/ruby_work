@@ -37,22 +37,23 @@ driver.start_driver
 
 ###登录
 element = driver.find_element('id', 'com.tcg.penny:id/account')
-is_hide_keyboard
-element.send_keys('13764905634')
-element = driver.find_element('id', 'com.tcg.penny:id/passwrod')
-is_hide_keyboard
-element.send_keys('111111')
-element = driver.find_element('id', 'com.tcg.penny:id/logining')
-is_hide_keyboard
-element.click
-
-#礼品
-element = driver.find_element('id', 'com.tcg.penny:id/select_btn_gift')
-element.click
-elements = driver.find_elements(:xpath=>"//android.widget.TextView")
-for i in 0..elements.size-1
-    puts elements[i].text
-end
+puts element.attribute('value')
+# is_hide_keyboard
+# element.send_keys('13764905634')
+# element = driver.find_element('id', 'com.tcg.penny:id/passwrod')
+# is_hide_keyboard
+# element.send_keys('111111')
+# element = driver.find_element('id', 'com.tcg.penny:id/logining')
+# is_hide_keyboard
+# element.click
+# 
+# #礼品
+# element = driver.find_element('id', 'com.tcg.penny:id/select_btn_gift')
+# element.click
+# elements = driver.find_elements(:xpath=>"//android.widget.TextView")
+# for i in 0..elements.size-1
+    # puts elements[i].text
+# end
 # puts "size:#{size}"
 # for i in 0..size-1
     # element = driver.find_element('xpath', "//android.widget.ListView[1]//android.widget.LinearLayout[#{i}]//android.widget.TextView[0]")
