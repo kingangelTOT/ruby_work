@@ -9,6 +9,7 @@ require 'driver/driver_project'
 
 class AutoTest
     include MyBase
+    include MyLog
     attr_accessor :auto_control, :dp
     def initialize
         monkey_path = '../../properties/auto_control.yaml'
@@ -39,7 +40,7 @@ class AutoTest
                     begin
                         DriverProject.new(auto_control, apk_info['package_name']).begin_project
                     rescue Exception => e
-                        logger(project_name).error e
+                        logger(auto_control['project']).error e
                         system("adb shell logcat>E:\auto_test\log\#{apk_info['package_name']}_android.txt")
                         retry
                     end
