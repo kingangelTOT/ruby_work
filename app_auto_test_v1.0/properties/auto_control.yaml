@@ -42,9 +42,9 @@ send_to:
 
 #########appium_properties##########
 app_driver:
-  device_name: d3658b6
-  platform_name: android
+  device_name: 
+  platform_name: 
   com.tcg.penny:
-    app_activity: .WelcomeActivity
-    app_package: com.tcg.penny
+    app_activity: 
+    app_package: 
 #########appium_properties##########
