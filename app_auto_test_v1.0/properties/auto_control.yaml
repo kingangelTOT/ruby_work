@@ -31,13 +31,13 @@ ready_time: 30
 
 
 #########email#############
-smtp_host: smtp.exmail.com
-smtp_username: kai.yan@tsingch.com
-smtp_password: king258angel
+smtp_host: 
+smtp_username: 
+smtp_password: 
 
-send_from: <kai.yan@tsingch.com>
+send_from: 
 send_to:
-- bo.zhang@tsingch.com
+- 
 #########email#############
 
 #########appium_properties##########
