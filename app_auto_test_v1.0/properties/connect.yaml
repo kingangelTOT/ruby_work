@@ -1,7 +1,7 @@
 #encoding:UTF-8
-alpha_host:
-alpha_userName:
-alpha_password:
+alpha_host: 9.9.9.12
+alpha_userName: fmrom
+alpha_password: fmrom@2014
 # alpha_dataBaseName: gamecenter
 alpha_port: 3306
 ##################################

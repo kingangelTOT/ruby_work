@@ -14,6 +14,7 @@ class AutoTest
     def initialize
         monkey_path = '../../properties/auto_control.yaml'
         @auto_control = load_config(monkey_path)
+        @package_name = ''
     end
 
     def start_monkey
@@ -28,8 +29,8 @@ class AutoTest
                 apk_info_array = get_apk_info(auto_control['app_path'])
                 apk_info_array = [{'package_name'=>'com.tcg.penny'}]
                 apk_info_array.each {|apk_info|
-                    # raise "#{apk_info['apk_name']}:安装失败,请检查测试手机是否与电脑连接!!!!!" if !install_apk("#{auto_control['app_path']}/#{apk_info['apk_name']}").eql?('Success')
-#                     
+                    @package_name = apk_info['package_name']
+                    # raise "#{apk_info['apk_name']}:安装失败,请检查测试手机是否与电脑连接!!!!!" if !install_apk("#{auto_control['app_path']}/#{apk_info['apk_name']}").eql?('Success')  
                     # File.delete("#{auto_control['app_path']}/#{apk_info['apk_name']}")
                     # move_apk_to_old(apk_info['apk_name'])
                     log_path = "#{auto_control['app_path']}/log"
@@ -37,23 +38,20 @@ class AutoTest
                     # system("adb shell monkey -p #{apk_info['package_name']} -s #{auto_control['s']} --ignore-crashes --ignore-timeouts --monitor-native-crashes -v -v #{auto_control['touch']} > #{log_path}/#{apk_info['apk_name']}_log.txt")
                     # sleep(auto_control['monkey_time'])
                     # data_hash = parse_moneky_log("#{log_path}/#{apk_info['apk_name']}_log.txt")
-                    begin
-                        DriverProject.new(auto_control, apk_info['package_name']).begin_project
-                    rescue Exception => e
-                        logger(auto_control['project']).error e
-                        system("adb shell logcat>E:\auto_test\log\#{apk_info['package_name']}_android.txt")
-                        retry
-                    end
-                    
+                    DriverProject.new(auto_control, apk_info['package_name']).begin_project
                     # send_email(subject, body)
                     # send_email(subject,content,to=nil)
                     sleep(auto_control['ready_time'])
                 }
+                flag = false if mount >= 2
                 mount += 1
             end
-        # rescue RuntimeError => e
-            # puts "e:#{e}*****************8"
-            # puts 'has some wrong'
+        # rescue Exception => e
+            # flag = false if mount >= 2
+            # mount += 1
+            # logger(auto_control['project']).error e
+            # log_cat_android(@package_name)
+            # retry
         # end
     end
 
@@ -140,6 +138,20 @@ class AutoTest
         data_hash['has_crash'] = has_crash
         data_hash['crash_array'] = crash_array
         data_hash
+    end
+    
+    def log_cat_android(package_name)
+        t1 = Thread.new {
+            system("adb logcat>E:\auto_test\log\android_#{package_name}_#{Time.new.to_i}.txt")
+        }
+        
+        t2 = Thread.new {
+            sleep(3)
+            system('taskkill /f /im adb.exe')
+            # t1.kill
+        }
+        t1.join
+        t2.join
     end
 end
 puts AutoTest.new.start_monkey

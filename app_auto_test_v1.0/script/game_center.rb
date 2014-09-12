@@ -9,10 +9,13 @@ module GameCenter
         def init_account_management(*args)
             input_extract_wechat1 = [*'a'..'z'].sample(5).join
             input_extract_wechat2 = [*'a'..'z'].sample(5).join
+            input_extract_wechat3 = [*'a'..'z'].sample(5).join
             logger(args[1]['project']).info "初始化微信账号:#{input_extract_wechat1} 位置:{C2}"
             logger(args[1]['project']).info "初始化微信账号:#{input_extract_wechat2} 位置:{C3}"
+            logger(args[1]['project']).info "初始化微信账号:#{input_extract_wechat3} 位置:{C4}"
             args[0].Range('C2').value = [input_extract_wechat1]
             args[0].Range('C3').value = [input_extract_wechat2]
+            args[0].Range('C4').value = [input_extract_wechat3]
         end
         
         def init_registration(*args)

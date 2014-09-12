@@ -30,9 +30,9 @@ class DriverFlow
 
         specific_flow = @data_sources.flow_hash[flow]
         specific_flow.each {|element|
-            logger(project_name).info "*******element******begin:#{element}************************"
+            logger(project_name).info "***#{flow}****element******begin:#{element}************************"
             element_report_hash = @de.begin_element(element, mwd, flow)
-            logger(project_name).info "********element*****end:#{element}************************\n"
+            logger(project_name).info "***#{flow}*****element*****end:#{element}************************\n"
             element_report_array << element_report_hash
             if element_report_hash
                 break if element_report_hash['element_result'].eql?('no_element_break') || element_report_hash['element_result'].eql?('empty')
@@ -58,13 +58,12 @@ class DriverFlow
                                 need_elements[retry_element_one].each{|need_element|
                                     need_element_content = element_content[need_element] if element_content.has_key?(need_element)
                                 }
-                                
                             end
                         end
-                        logger(project_name).info "*******element******begin:#{retry_element_one}*****content_index:#{element_content['index']}******正在循环中*************"
+                        logger(project_name).info "***#{flow}****element******begin:#{retry_element_one}*****content_index:#{element_content['index']}******正在循环中*************"
                         logger(project_name).info "运行参数化数据所需要的元素:#{retry_elements}"
                         element_report_hash = @de.begin_element(retry_element_one, mwd, element_content, need_element_content, flow)
-                        logger(project_name).info "********element*****end:#{retry_element_one}*******content_index:#{element_content['index']}******正在循环中***********\n"
+                        logger(project_name).info "***#{flow}*****element*****end:#{retry_element_one}*******content_index:#{element_content['index']}******正在循环中***********\n"
                         # raise "流程:#{flow},重复的元素不在流程表中!!!!" if !specific_flow.include?(retry_element_one)
                         logger(project_name).info "从#{specific_flow}中删除元素:#{retry_element_one}"
                         specific_flow.delete(retry_element_one) if element != retry_element_one
