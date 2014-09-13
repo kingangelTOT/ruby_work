@@ -3,7 +3,7 @@ base_path: E:\work_git\ruby_work\app_auto_test\app_auto_test_v1.0
 project: game_center
 flow_max_size: ['b','c','d','e','f','g','h','i','j','k','l','m','n']
 # username: kingangelTOT
-app_or_web: interface
+app_or_web: app
 
 
 app_path: E:\auto_test
